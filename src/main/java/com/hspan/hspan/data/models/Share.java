@@ -10,17 +10,25 @@ import javax.persistence.Entity;
 public class Share extends RootEntity {
     private Long fromID;
     private Long toID;
+    private Long fileID;
 
+    private boolean isPublic;
     private boolean isCanceled;
 
-    public Share(long id, Long fromID, Long toID, boolean isCanceled) {
+    public Share() {
+
+    }
+
+    public Share(long id, Long fromID, Long toID, Long fileID, boolean isPublic) {
         super(id);
         this.fromID = fromID;
         this.toID = toID;
-        this.isCanceled = isCanceled;
+        this.fileID = fileID;
+        this.isCanceled = false;
+        this.isPublic = isPublic;
     }
 
-    public void setCanceled(boolean canceled) {
+    public void canceled(boolean canceled) {
         isCanceled = canceled;
     }
 

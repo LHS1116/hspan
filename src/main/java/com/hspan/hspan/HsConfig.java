@@ -6,6 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class HsConfig {
     private String filePath;
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public String getFilePath() {
         return filePath;
     }

@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Transactional
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/login/")
 public class LoginController {
     @Autowired
     Auth auth;
@@ -31,6 +31,12 @@ public class LoginController {
 
     @Autowired
     UserRepository userRepository;
+
+    @GetMapping("test")
+    @ResponseBody
+    public String test() {
+        return "Login Test!";
+    }
 
     @PostMapping("in")
     @ResponseBody

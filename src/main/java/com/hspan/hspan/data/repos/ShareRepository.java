@@ -9,6 +9,8 @@ public interface ShareRepository extends JpaRepository<Share, Long> {
 
     List<Share> findAllByFromID(Long fromID);
 
-    Share findByFromIDAndToID(Long fromID, Long toID);
+    List<Share> findByFromIDAndToID(Long fromID, Long toID);
+
+    Share findByFromIDAndToIDAndFileID(Long fromID, Long toID, Long fileID);
 
 }

@@ -2,9 +2,11 @@ package com.hspan.hspan.data;
 
 import lombok.Getter;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-
+@MappedSuperclass
 public class RootEntity {
     @Id
     private long id;

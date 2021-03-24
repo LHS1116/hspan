@@ -37,6 +37,12 @@ public class FileController {
 
     @Autowired
 
+    @GetMapping("test")
+    @ResponseBody
+    public String fileTest() {
+        return "File test!";
+    }
+
 
     @PostMapping("upload")
     public String fileUpload(@RequestParam("file") MultipartFile file) {
