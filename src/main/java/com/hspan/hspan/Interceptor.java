@@ -19,7 +19,7 @@ public class Interceptor implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加一个拦截器，排除登录url
         registry.addInterceptor(loginAuthInterceptor())
-                .excludePathPatterns("/user");
+                .excludePathPatterns("/user/*").excludePathPatterns("/login/*");
 
     }
 }

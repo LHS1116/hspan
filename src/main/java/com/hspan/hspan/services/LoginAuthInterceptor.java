@@ -3,6 +3,7 @@ package com.hspan.hspan.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hspan.hspan.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+//@Component
 public class LoginAuthInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -22,8 +24,10 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
         if (userId == null) {
-            throw new UnauthorizedException();
-//            return false;
+            response.sendRedirect("/login/test");
+//            response.sendError(401, new UnauthorizedException().toString());
+//            throw new UnauthorizedException();
+            return false;
         }
         return true;
     }

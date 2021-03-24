@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserBasicModel {
+public class ShareBasicModel {
     @NotNull
-//    @Size(min = 3, max = 16)
-    public String username;
+    public Long fromID;
+
+    public Long toID;
 
     @NotNull
-//    @Size(min = 6, max = 32)
-    public String password;
+    public Long fileID;
 
+    public boolean isPublic;
 }

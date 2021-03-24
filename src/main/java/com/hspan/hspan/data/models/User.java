@@ -3,6 +3,7 @@ package com.hspan.hspan.data.models;
 import com.hspan.hspan.data.RootEntity;
 import lombok.Getter;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,12 @@ public class User extends RootEntity {
 
     private String password;
 
+    @ElementCollection(targetClass=Long.class)
     private List<Long> files;
+
+    public User() {
+
+    }
 
 
     public User(long id, String username, String password) {
