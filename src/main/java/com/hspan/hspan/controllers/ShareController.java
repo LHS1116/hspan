@@ -5,25 +5,26 @@ import com.hspan.hspan.data.models.Share;
 import com.hspan.hspan.data.repos.ShareRepository;
 import com.hspan.hspan.data.repos.UserRepository;
 import com.hspan.hspan.dto.in.ShareBasicModel;
-import com.hspan.hspan.dto.out.IdDto;
+import com.hspan.hspan.dto.out.QResponse;
 import com.hspan.hspan.dto.out.QShare;
-import com.hspan.hspan.exception.BadRequestException;
-import com.hspan.hspan.exception.NotFoundException;
 import com.hspan.hspan.services.Auth;
 import com.hspan.hspan.services.Snowflake;
-import com.sun.xml.bind.v2.model.core.ID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.websocket.server.PathParam;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Transactional
 @RestController
-@RequestMapping("/share")
+@RequestMapping("/api/share/")
 public class ShareController {
 
     @Autowired
@@ -45,34 +46,64 @@ public class ShareController {
     EntityManager entityManager;
 
     @PostMapping
-    public IdDto creatShare(@RequestBody ShareBasicModel model) {
+    @ResponseBody
+    public QResponse creatShare(@RequestBody ShareBasicModel model, HttpServletResponse response) throws IOException {
         var from = model.fromID;
         var to = model.toID;
         var isPublic = model.isPublic;
-        var file = model.fileID;
-        if(!isPublic && to == null) {
-            throw new BadRequestException();
-        }
-        var sharInDb = shareRepository.findByFromIDAndToIDAndFileID(from, to, file);
-        IdDto resID = sharInDb == null ? null :new IdDto(sharInDb.getId());
+        var fileID = model.fileID;
+//        var message = "success";
+//        if(!isPublic && to == null) {
+//            message = "错误的文件权限";
+//            return new QResponse(message, -1L, "ok", false);
+//        }
 
+        var sharInDb = shareRepository.findByFromIDAndIsPublicAndFileID(from, isPublic, fileID);
+        String code = null;
+        Long resID = sharInDb == null ? null :sharInDb.getId();
+        if (!isPublic) {
+            String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            Random random=new Random();
+            StringBuilder sb=new StringBuilder();
+            for(int i = 0; i < 5; i++){
+                int number=random.nextInt(62);
+                sb.append(str.charAt(number));
+            }
+            code = sb.toString();
+        }
         if(sharInDb == null) {
-            Share newShare = new Share(snowflake.nextId(), from, to, file, isPublic);
+            Share newShare = new Share(snowflake.nextId(), from, to, fileID, isPublic, code);
             shareRepository.save(newShare);
-            resID = new IdDto(newShare.getId());
+            resID = newShare.getId();
+            sharInDb = newShare;
         }
 
-        return resID;
+        return new QResponse(sharInDb.getCode(), resID, "ok", true);
     }
 
     @GetMapping("{id}")
-    public QShare getShareByID(@PathVariable Long id) {
+    public QResponse getShareByID(@PathVariable("id") Long id) {
         var shareInDb = shareRepository.findById(id).orElse(null);
         if (shareInDb == null) {
-            throw new NotFoundException();
+            return QResponse.notFoundResponse("Share");
+        }
+        System.out.println(shareInDb);
+        var qs = QShare.convert(shareInDb, modelMapper);
+        System.out.println("QS1:" + qs.toString());
+        return new QResponse(qs, id, "ok", true);
+    }
+
+    @GetMapping("check/{id}")
+    public QResponse checkShareCode(@PathVariable("id") Long id, @PathParam("code") String code) {
+        var shareInDb = shareRepository.findById(id).orElse(null);
+        if (shareInDb == null) {
+            return QResponse.notFoundResponse("Share");
+        }
+        if (shareInDb.getCode().equals(code)) {
+            return new QResponse(null, shareInDb.getFileID(), "ok", true);
         }
 
-        return QShare.convert(shareInDb, modelMapper);
+        return new QResponse(null, -1L, "提取码错误", false);
     }
 
     @GetMapping()

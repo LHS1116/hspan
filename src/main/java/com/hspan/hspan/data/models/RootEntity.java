@@ -1,4 +1,4 @@
-package com.hspan.hspan.data;
+package com.hspan.hspan.data.models;
 
 import lombok.Getter;
 

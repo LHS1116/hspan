@@ -1,6 +1,5 @@
 package com.hspan.hspan.data.models;
 
-import com.hspan.hspan.data.RootEntity;
 import lombok.Getter;
 
 import javax.persistence.ElementCollection;
@@ -49,5 +48,14 @@ public class User extends RootEntity {
 
     public void removeFile(Long fileId) {
         this.files.remove(fileId);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", files=" + files +
+                '}';
     }
 }

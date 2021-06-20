@@ -5,9 +5,10 @@ import com.hspan.hspan.data.repos.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 
 /**
- * 读取cookie来判断用户是否登录、并提供用户的id
+ * 读取session来判断用户是否登录、并提供用户的id
  */
 public class Auth {
     /**
@@ -66,17 +67,6 @@ public class Auth {
     private void load() {
         var success = innerLoad();
         loaded = true;
-        // if not success, clear some cookie
-//        if (!success) {
-//            var cookie1 = new Cookie("username", null);
-//            cookie1.setPath("/");
-//
-//            var cookie2 = new Cookie("password", null);
-//            cookie2.setPath("/");
-//
-//            response.addCookie(cookie1);
-//            response.addCookie(cookie2);
-//        }
     }
 
     public boolean isLoggedIn() {
@@ -95,5 +85,8 @@ public class Auth {
         }
 
         return userID;
+    }
+    public String formatDate(long timestamp) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(timestamp);
     }
 }
