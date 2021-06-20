@@ -29,4 +29,15 @@ public class QResponse {
     public boolean isSuccess() {
         return success;
     }
+
+    public static QResponse unauthorizedResponse() {
+        return new QResponse(null, -1L, "请先登录！", false);
+    }
+
+    public static QResponse notFoundResponse() {
+        return new QResponse(null, -1L, "Not Found!", false);
+    }
+    public static QResponse notFoundResponse(String msg) {
+        return new QResponse(null, -1L, msg + " Not Found!", false);
+    }
 }

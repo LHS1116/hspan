@@ -11,6 +11,6 @@ public interface ShareRepository extends JpaRepository<Share, Long> {
 
     List<Share> findByFromIDAndToID(Long fromID, Long toID);
 
-    Share findByFromIDAndToIDAndFileID(Long fromID, Long toID, Long fileID);
+    Share findByFromIDAndIsPublicAndFileID(Long fromID, Boolean isPublic, Long fileID);
 
 }
