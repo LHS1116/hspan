@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav-bar-top></nav-bar-top>
+    <nav-bar-top v-if="this.success"></nav-bar-top>
     <router-view></router-view>
   </div>
 
@@ -18,18 +18,22 @@ import route from "./router";
 export default {
   name: 'app',
   components: {NavBarTop},
+  data() {
+    return {
+      success:false
+    }
+  },
   created() {
 
     this.axios.get("/api/user/me").then((res) => {
       console.log("app", res)
+
       if (res != null && res.data.success) {
         this.$utils.setStorage("me", res.data.data);
+        this.success = true;
       } else {
         this.$utils.popStorage("me");
-      }
-
-      if (this.$utils.currentUser() == null) {
-        route.push("/login");
+        window.location.href = "http://xsso.lhs.com:8097/login?sourceUrl=" + encodeURIComponent(window.location.href)
       }
     });
   },

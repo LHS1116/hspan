@@ -42,9 +42,10 @@ public class Auth {
         }
 
         var username = session.getAttribute("username");
-        var userID = session.getAttribute("userID");
+//        var userID = session.getAttribute("userID");
+        System.out.println("Auth username: " + username);
+        if (username == null) {
 
-        if (username == null || userID == null) {
             return false;
         }
 
@@ -54,9 +55,9 @@ public class Auth {
             return false;
         }
 
-        if (!user.getId().equals(userID)) {
-            return false;
-        }
+//        if (!user.getId().equals(userID)) {
+//            return false;
+//        }
 
         // username and password matches
         this.userID = user.getId();

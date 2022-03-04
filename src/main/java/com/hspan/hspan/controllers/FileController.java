@@ -94,25 +94,29 @@ public class FileController {
     }
 
     @GetMapping("download/{id}")
-    public QResponse downloadFile(@PathVariable("id") Long fileId, HttpServletResponse response, HttpServletRequest request) throws IOException {
+    public void downloadFile(@PathVariable("id") Long fileId, HttpServletResponse response, HttpServletRequest request) throws IOException {
         if(!auth.isLoggedIn()) {
             response.sendRedirect("/api/login/test");
         }
         HFile hFile = hFileRepository.findById(fileId).orElse(null);
         if (hFile == null) {
             System.out.println(1);
-            return QResponse.notFoundResponse();
+//            return QResponse.notFoundResponse();
+            return;
         }
 
         try {
             File file = new File(hFile.getFilePath());
             if(!file.exists()) {
-                return QResponse.notFoundResponse();
+//                return QResponse.notFoundResponse();
+                return;
             }
             response.reset();
             response.setContentType("application/x-download");
             response.setHeader("Content-Disposition","attachment;fileName=" +
                     java.net.URLEncoder.encode(hFile.getFileName(), StandardCharsets.UTF_8));
+            response.setContentLength(hFile.getSize().intValue());
+
             byte[] buffer = new byte[2048];
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
             OutputStream os = response.getOutputStream();
@@ -136,7 +140,8 @@ public class FileController {
              e.printStackTrace();
         }
 
-        return new QResponse(null, hFile.getId(), "下载成功", true);
+//        return new QResponse(null, hFile.getId(), "下载成功", true);
+        return;
     }
 
     @GetMapping("info/{id}")

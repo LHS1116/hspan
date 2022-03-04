@@ -11,9 +11,9 @@ import axios from "axios";
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   // timeout: 60 * 1000, // Timeout
-  // withCredentials: true, // Check cross-site Access-Control
+  withCredentials: true, // Check cross-site Access-Control
 };
-
+axios.defaults.withCredentials = true
 const _axios = axios.create(config);
 
 _axios.interceptors.request.use(

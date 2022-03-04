@@ -50,7 +50,7 @@ export default {
         })
       },
       baseUrl: function () {
-         return "localhost:8080/"
+         return "39.106.201.68:8082/"
       },
       copyToBoard: function (data) {
         const input = document.createElement("input");     // 直接构建input

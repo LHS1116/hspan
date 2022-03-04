@@ -71,7 +71,7 @@ export default {
           }
           this.access = res.data.data.isPublic ? "public" : "private";
         } else {
-          alert("错误的分享链接！")
+          alert(res.data.status)
         }
         // alert(res.data.status);
       })

@@ -63,9 +63,6 @@
               <i class="el-icon-share"></i>
             </el-button>
           </el-popover>
-
-
-
           <el-button type="text" size="small" @click="deleteFile(scope.$index)">
             <i class="el-icon-delete"></i>
           </el-button>
@@ -96,33 +93,18 @@ export default {
   methods: {
 
     listFile: function () {
-      const tmp = [
-        {
-          name: '文件1',
-          size: '106KB',
-          uploadDate: '2021-06-10'
-        },
-        {
-          name: '文件2',
-          size: '106GB',
-          uploadDate: '2021-06-10'
-        },
-        {
-          name: '文件3',
-          size: '106MB',
-          uploadDate: '2021-06-10'
 
-        }
-      ]
       this.fileList = [];
       const currentUser = this.$utils.currentUser();
       if (currentUser != null) {
         const fileIDList = currentUser.files;
         console.log("idlist:", fileIDList)
-        for (const fileID of fileIDList) {
+        for (const fileID in fileIDList) {
           this.getFileInfo(fileID);
         }
         console.log("files", this.fileList)
+      } else {
+        this.$router.push("/login")
       }
     },
     getFileInfo: function (fileID) {
@@ -133,6 +115,7 @@ export default {
           res.data.data.num = this.fileList.length + 1;
           this.fileList.push(res.data.data)
         }
+        this.fileList
         // alert(res.data.status);
       })
 

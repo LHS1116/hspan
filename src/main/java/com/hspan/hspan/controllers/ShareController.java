@@ -46,7 +46,6 @@ public class ShareController {
     EntityManager entityManager;
 
     @PostMapping
-    @ResponseBody
     public QResponse creatShare(@RequestBody ShareBasicModel model, HttpServletResponse response) throws IOException {
         var from = model.fromID;
         var to = model.toID;
@@ -108,10 +107,10 @@ public class ShareController {
 
     @GetMapping()
     public List<QShare> getShares(
-            @RequestParam Long fromID,
-            @RequestParam(required = false) Long toID,
-            @RequestParam(required = false) int pageNo,
-            @RequestParam(required = false) int pageSize
+            @PathParam("from") Long fromID,
+            @PathParam("to") Long toID,
+            @PathParam("pagerNum") int pageNo,
+            @PathParam("pageSize") int pageSize
     ) {
         int pNo = pageNo <= 0 ? 1 : pageNo;
         int pSize = pageSize <= 0 ? 10 : pageSize;

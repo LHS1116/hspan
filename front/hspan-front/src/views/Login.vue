@@ -4,7 +4,8 @@
       <h1 class="text-center">登录</h1>
 
       <!-- 登录表单区域 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
+      <div >
+        <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入账号" prefix-icon="el-icon-user"></el-input>
@@ -25,6 +26,11 @@
            <el-button type="info" style="text-align: center" @click="jumpToRegister">注册</el-button>
         </el-form-item>
       </el-form>
+      </div>
+<!--      <form method="get" action="localhost:8099/api/login/cas/in">-->
+<!--&lt;!&ndash;        <el-button type="submit" @click="jumpToCasServer">CAS统一身份认证</el-button>&ndash;&gt;-->
+<!--          <button type="submit">CAS</button>-->
+<!--      </form>-->
     </div>
   </div>
 </template>
@@ -73,6 +79,9 @@ export default {
     }
   },
   methods: {
+    jumpToCasServer() {
+      this.$axios.get("/api/login/cas/in")
+    },
     // 点击重置按钮，重置登录表单
     // resetLoginForm() {
     //   this.$refs.loginFormRef.resetFields();
@@ -91,23 +100,24 @@ export default {
               if(success) {
                 alert("登录成功");
                 // this.$router.push("/my/files")
+                setTimeout(() => {
+                  this.$axios
+                    .get("/api/user/me")
+                    .then((res) => {
+                      this.$utils.setStorage("me", res.data.data);
+
+                      // Vue.prototype.app.$forceUpdate(); // update navbar and global.me
+                      Vue.prototype.navBar.$forceUpdate()
+
+                      this.$router.push("/my/files");
+                    })
+                    .catch((p) => this.err(p));
+                }, 300);
               } else {
-                alert(res.data.data)
+                alert(res.data.status)
               }
               // this.success("登录成功，正在跳转..."); // success消息示例
-              setTimeout(() => {
-                this.$axios
-                  .get("/api/user/me")
-                  .then((res) => {
-                    this.$utils.setStorage("me", res.data.data);
 
-                    // Vue.prototype.app.$forceUpdate(); // update navbar and global.me
-                    Vue.prototype.navBar.$forceUpdate()
-
-                    this.$router.push("/my/files");
-                  })
-                  .catch((p) => this.err(p));
-              }, 300);
             })
             .catch((p) => this.err(p)); // error消息示例
         } else {

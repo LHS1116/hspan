@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "hspan.casserver",
+      "type": "java.lang.String",
+      "description": "Description for hspan.casserver."
+  }
+] }
